@@ -1,0 +1,117 @@
+body{
+    text-align: center;
+}
+
+h2, input, button, table{
+    font-family:verdana;
+}
+
+#form_datos_tabla {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    border-collapse: collapse;
+    font-size: 18px;
+}
+
+#form_datos_tabla th, #form_datos_tabla td {
+    text-align: left;
+    padding: 10px;
+}
+
+#form_datos_tabla tr {
+    border-bottom: 1px solid #ddd;
+}
+
+#form_datos_tabla tr:hover {
+    background-color: #fdb6ff;
+}
+
+#form_datos_filtrosTabla{
+    padding: 10px;
+}
+
+#form_abm input, select, #form_datos_edadPromedio{
+    padding: 10px 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid cornflowerblue;
+    border-radius: 4px;
+    width: 25%;
+    background-color: #f1f1f1; 
+}
+
+#form_abm input:disabled{
+    background-color: #cfcfcf;
+}
+
+input[type="checkbox"]:checked {
+    box-shadow: 0 0 0 1px cornflowerblue;
+}
+
+button{
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    background-color: #5563df;
+}
+
+button:hover{
+    background-color: #353e8b;
+}
+
+button:disabled{
+    background-color: gray;
+}
+
+hr{
+    width:75%;
+}
+
+#spinner{
+    position:fixed;
+    left: 0;
+    right:0;
+    top:0;
+    bottom:0;
+    
+    background-color: rgba(255,255,255,0.7);
+    z-index:9999;
+}
+
+.smt-spinner-circle {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    border-radius: 75%;
+}
+
+.smt-spinner{
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    border-right: 3px solid #fdb6ff;
+    border-top: 3px solid #5563df;
+    border-left: 3px solid #5563df;
+    border-bottom: 3px solid #5563df;
+    animation: rotate--spinner 1s infinite;
+}
+
+@keyframes rotate--spinner{
+    from{
+        transform: rotate(0);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
