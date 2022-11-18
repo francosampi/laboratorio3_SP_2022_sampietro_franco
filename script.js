@@ -89,8 +89,7 @@ function traerDatosTabla(){
             return respuesta.json();
         alert("ERROR! Los registros no fueron cargados...");
     }).then(texto=>{
-        datosJson = texto;
-        const datos=datosJson;
+        const datos=texto;
 
         //PARSEAR DATOS
         datos.forEach(vehiculo => {
@@ -366,7 +365,7 @@ function agregarNuevoRegistro(){
 
 
 //POST - MODIFICAR REGISTRO
-//***ASYNC
+//***ASYNC FETCH
 async function modificarRegistro(_vehiculo)
 {
     mostrarSpinner();
@@ -402,6 +401,8 @@ async function modificarRegistro(_vehiculo)
     abrirTabla();
 }
 
+//DELETE - ELIMINAR REGISTRO
+//***FETCH
 function eliminarRegistro(_vehiculo)
 {
     mostrarSpinner();
@@ -438,9 +439,8 @@ function eliminarRegistro(_vehiculo)
 
 //VALIDAR INPUTS ABM DONDE CORRESPONDA (REGEX)
 function datosValidados(){
-    const letrasNumerosEspacios=/^[A-Za-z0-9]+$/g;
-
     if(
+        (abmInputmodelo.value.trim()!=="") &&
         (!isNaN(abmInputanoFab.value) && parseInt(abmInputanoFab.value)>-1) &&
         (!isNaN(abmInputvelMax.value) && parseInt(abmInputvelMax.value)>-1) &&
         (abmInputaltMax.disabled ? true : (!isNaN(abmInputaltMax.value) && parseInt(abmInputaltMax.value)>-1)) &&
