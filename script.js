@@ -10,19 +10,19 @@ class Vehiculo {
     constructor(_id, _modelo, _anoFab, _velMax) {
         this.id=_id== null ? "" : _id;
         this.modelo= _modelo==null ? "" : _modelo;
-        this.anoFab= _anoFab>1884 ? _anoFabo : 1885;
+        this.anoFab= _anoFab>1884 ? _anoFab : 1885;
         this.velMax= _velMax>-1 ? _velMax : _velMax;
     }
 }
 
 class Aereo extends Vehiculo{
-    atMax=0;
+    altMax=0;
     autonomia=0;
 
-    constructor(_id, _modelo, _anoFab, _velMax, _atMax, _autonomia)
+    constructor(_id, _modelo, _anoFab, _velMax, _altMax, _autonomia)
     {
         super(_id, _modelo, _anoFab, _velMax);
-        this.atMax= _atMax>0 ? _atMax : 1;
+        this.altMax= _altMax>0 ? _altMax : 1;
         this.autonomia= _autonomia>0 ? _autonomia : 1;
     }
 }
@@ -53,7 +53,7 @@ const abmInputmodelo=document.getElementById("input_modelo")
 const abmInputanoFab=document.getElementById("input_anoFab")
 const abmInputvelMax=document.getElementById("input_velMax");
 const abmInputTipo=document.getElementById("input_tipo");
-const abmInputatMax=document.getElementById("input_atMax");
+const abmInputaltMax=document.getElementById("input_altMax");
 const abmInputautonomia=document.getElementById("input_autonomia");
 const abmInputcantPue=document.getElementById("input_cantPue");
 const abmInputcantRue=document.getElementById("input_cantRue");
@@ -69,53 +69,59 @@ traerDatosTabla();
 
 //GET
 //***XHTTP
+
+mostrarSpinner();
+
+
 function traerDatosTabla(){
-    mostrarSpinner();
+    let consulta = fetch('http://localhost/vehiculoAereoTerrestre.php', {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer'
+    });
 
-    var xhttp = new XMLHttpRequest();
+    consulta.then(respuesta =>{
+        if (respuesta.status==200)
+            return respuesta.json();
+        alert("ERROR! Los registros no fueron cargados...");
+    }).then(texto=>{
+        datosJson = texto;
+        const datos=datosJson;
 
-    xhttp.onreadystatechange = () => {
-        if (xhttp.readyState == 4){
-            if (xhttp.status == 200)
-            {
-                datosJson = xhttp.response;
-                const datos=JSON.parse(datosJson);
+        //PARSEAR DATOS
+        datos.forEach(vehiculo => {
+            let datos=[
+                vehiculo.id,
+                vehiculo.modelo,
+                vehiculo.anoFab,
+                vehiculo.velMax
+            ];
 
-                //PARSEAR DATOS
-                datos.forEach(vehiculo => {
-                    let datos=[
-                        vehiculo.id,
-                        vehiculo.modelo,
-                        vehiculo.anoFab,
-                        vehiculo.velMax
-                    ];
-
-                    if (vehiculo.hasOwnProperty('atMax'))
-                        vehiculos.push(new Aereo(...datos, vehiculo.atMax, vehiculo.autonomia));
-                    else if(vehiculo.hasOwnProperty('cantPue'))
-                        vehiculos.push(new Terrestre(...datos, vehiculo.cantPue, vehiculo.cantRue));
-                    else
-                        vehiculos.push(new vehiculo(...datos));
-                });
-                
-            }
+            if (vehiculo.hasOwnProperty('altMax'))
+                vehiculos.push(new Aereo(...datos, vehiculo.altMax, vehiculo.autonomia));
+            else if(vehiculo.hasOwnProperty('cantPue'))
+                vehiculos.push(new Terrestre(...datos, vehiculo.cantPue, vehiculo.cantRue));
             else
-                alert("ERROR! Los datos no fueron recuperados...");
-
-            generarTabla();
-            mostrarSpinner(false);
-        }
-    };
-    xhttp.open("GET", "http://localhost/vehiculoAereoTerrestre.php", true, "usuario", "pass");
-    xhttp.send();
+                vehiculos.push(new Vehiculo(...datos));
+        });
+        mostrarSpinner(false);
+        generarTabla();
+    });
 }
+
 
 function generarTabla(){
     document.getElementById('form_datos_tabla').remove();
     formTabla = document.createElement('table');
     formTabla.id='form_datos_tabla';
 
-    let vehiculoDatosDefin=['id', 'modelo', 'anoFab', 'velMax', 'atMax', 'autonomia', 'cantPue', 'cantRue'];
+    let vehiculoDatosDefin=['id', 'modelo', 'anoFab', 'velMax', 'altMax', 'autonomia', 'cantPue', 'cantRue'];
 
     //HEAD Y BODY DE TABLA
     let thead = document.createElement('thead');
@@ -135,7 +141,7 @@ function generarTabla(){
         let tr = document.createElement('tr');
 
         let vehiculoDatos=[vehiculo.id, vehiculo.modelo, vehiculo.anoFab, vehiculo.velMax,
-                          vehiculo.atMax, vehiculo.autonomia,
+                          vehiculo.altMax, vehiculo.autonomia,
                           vehiculo.cantPue, vehiculo.cantRue];
 
         for (let i = 0; i < vehiculoDatosDefin.length; i++) {
@@ -206,7 +212,7 @@ function rellenarAbm(vehiculo){
     else if (vehiculo instanceof Terrestre)
         abmInputTipo.selectedIndex=1;
 
-    escribirSiNoEsUndefined(abmInputatMax, vehiculo.atMax);
+    escribirSiNoEsUndefined(abmInputaltMax, vehiculo.altMax);
     escribirSiNoEsUndefined(abmInputautonomia, vehiculo.autonomia);
     escribirSiNoEsUndefined(abmInputcantPue, vehiculo.cantPue);
     escribirSiNoEsUndefined(abmInputcantRue, vehiculo.cantRue);
@@ -229,7 +235,7 @@ function ajustarAbmSegunTipo(){
     let boolTerrestre = abmInputTipo.selectedIndex==1;
 
     //AEREO
-    abmInputatMax.disabled=!boolAereo;
+    abmInputaltMax.disabled=!boolAereo;
     abmInputautonomia.disabled=!boolAereo;
 
     //TERRESTRE
@@ -278,7 +284,7 @@ function abrirAbm(_operacion, vehiculo){
             abmInputanoFab.disabled=true;
             abmInputvelMax.disabled=true;
             abmInputTipo.disabled=true;
-            abmInputatMax.disabled=true;
+            abmInputaltMax.disabled=true;
             abmInputautonomia.disabled=true;
             abmInputcantPue.disabled=true;
             abmInputcantRue.disabled=true;
@@ -334,6 +340,8 @@ abmCancelar.addEventListener("click", abrirTabla);
 
 //PUT - AGREGAR REGISTRO
 //***SIN ASYNC
+
+/*
 function agregarNuevoRegistro()
 {
     mostrarSpinner();
@@ -364,8 +372,37 @@ function agregarNuevoRegistro()
         abrirTabla();
     });
 }
+*/
 
-//PUT - AGREGAR REGISTRO
+function agregarNuevoRegistro(){
+    mostrarSpinner();
+
+    var xhttp = new XMLHttpRequest();
+
+    let nuevoRegistro=crearvehiculoAbm();
+
+    xhttp.onreadystatechange = () => {
+        if (xhttp.readyState == 4){
+            if (xhttp.status == 200)
+            {
+                nuevoRegistro.id=JSON.parse(xhttp.response).id;
+                vehiculos.push(nuevoRegistro);
+                mostrarSpinner(false);
+                abrirTabla();
+            }
+            else
+                alert("ERROR! El registro no fue dado de alta...");
+
+            generarTabla();
+            mostrarSpinner(false);
+        }
+    };
+    xhttp.open("PUT", "http://localhost/vehiculoAereoTerrestre.php", true, "usuario", "pass");
+    xhttp.send(JSON.stringify(nuevoRegistro));
+}
+
+
+//POST - MODIFICAR REGISTRO
 //***ASYNC
 async function modificarRegistro(_vehiculo)
 {
@@ -448,7 +485,7 @@ function datosValidados(){
         abmInputmodelo.value.match(soloLetras) &&
         (!isNaN(abmInputanoFab.value) && parseInt(abmInputanoFab.value)>-1) &&
         (!isNaN(abmInputvelMax.value) && parseInt(abmInputvelMax.value)>-1) &&
-        (abmInputatMax.disabled ? true : (!isNaN(abmInputatMax.value) && parseInt(abmInputatMax.value)>-1)) &&
+        (abmInputaltMax.disabled ? true : (!isNaN(abmInputaltMax.value) && parseInt(abmInputaltMax.value)>-1)) &&
         (abmInputautonomia.disabled ? true : (!isNaN(abmInputautonomia.value) && parseInt(abmInputautonomia.value)>-1)) &&
         (abmInputcantPue.disabled ? true : (!isNaN(abmInputcantPue.value) && parseInt(abmInputcantPue.value)>-1)) &&
         (abmInputcantRue.disabled ? true : (!isNaN(abmInputcantRue.value) && parseInt(abmInputcantRue.value)>-1))
@@ -470,10 +507,9 @@ function crearvehiculoAbm() {
     if (abmInputTipo.selectedIndex==0)
     {
         let datosAereo=[
-            parseInt(abmInputatMax.value),
+            parseInt(abmInputaltMax.value),
             parseInt(abmInputautonomia.value),
         ];
-        capitalizarString(datosAereo);
 
         return new Aereo(...datos, ...datosAereo);
     }
@@ -483,7 +519,6 @@ function crearvehiculoAbm() {
             parseInt(abmInputcantPue.value),
             parseInt(abmInputcantRue.value),
         ];
-        capitalizarString(datosTerrestre);
 
         return new Terrestre(...datos, ...datosTerrestre);
     }
