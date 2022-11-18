@@ -464,25 +464,20 @@ function eliminarRegistro(_vehiculo)
     
     consulta.then(respuesta =>{
         if (respuesta.status===200)
-        {
             vehiculos.splice(index, 1);
-            return respuesta.text();
-        }
         else
             alert("ERROR! el registro no fue dado de baja...");
             
         mostrarSpinner(false);
         abrirTabla();
     });
-
 }
 
 //VALIDAR INPUTS ABM DONDE CORRESPONDA (REGEX)
 function datosValidados(){
-    const soloLetras=/^[A-Za-z\s]+$/;
+    const letrasNumerosEspacios=/^[A-Za-z0-9]+$/g;
 
     if(
-        abmInputmodelo.value.match(soloLetras) &&
         (!isNaN(abmInputanoFab.value) && parseInt(abmInputanoFab.value)>-1) &&
         (!isNaN(abmInputvelMax.value) && parseInt(abmInputvelMax.value)>-1) &&
         (abmInputaltMax.disabled ? true : (!isNaN(abmInputaltMax.value) && parseInt(abmInputaltMax.value)>-1)) &&
