@@ -1,5 +1,3 @@
-//Fetch: falla cuando falla protocolo
-
 //CLASES
 class Vehiculo {
     id = "";
@@ -42,6 +40,7 @@ class Terrestre extends Vehiculo{
 //DATOS
 let datosJson;
 let vehiculos = [];
+const rutaConexion = 'http://localhost/vehiculoAereoTerrestre.php';
 
 //ABM
 const abm=document.getElementById("form_abm");
@@ -72,7 +71,7 @@ traerDatosTabla();
 function traerDatosTabla(){
     mostrarSpinner();
     
-    let consulta = fetch('http://localhost/vehiculoAereoTerrestre.php', {
+    let consulta = fetch(rutaConexion, {
         method: 'GET',
         mode: 'cors',
         cache: 'no-cache',
@@ -109,6 +108,8 @@ function traerDatosTabla(){
         });
         mostrarSpinner(false);
         generarTabla();
+    }).catch(e=>{
+        alert("Ocurrió un error: "+e);
     });
 }
 
@@ -359,7 +360,7 @@ function agregarNuevoRegistro(){
             mostrarSpinner(false);
         }
     };
-    xhttp.open("PUT", "http://localhost/vehiculoAereoTerrestre.php", true, "usuario", "pass");
+    xhttp.open("PUT", rutaConexion, true, "usuario", "pass");
     xhttp.send(JSON.stringify(nuevoRegistro));
 }
 
@@ -376,7 +377,7 @@ async function modificarRegistro(_vehiculo)
     if (~index)
         registroModificado=vehiculos[index];
     
-    let respuesta = await fetch('http://localhost/vehiculoAereoTerrestre.php', {
+    let respuesta = await fetch(rutaConexion, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
@@ -413,7 +414,7 @@ function eliminarRegistro(_vehiculo)
     if (~index)
         registroEliminadoId=vehiculos[index].id;
     
-    let consulta = fetch('http://localhost/vehiculoAereoTerrestre.php', {
+    let consulta = fetch(rutaConexion, {
         method: 'DELETE',
         mode: 'cors',
         cache: 'no-cache',
