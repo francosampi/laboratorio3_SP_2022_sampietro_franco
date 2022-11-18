@@ -5,7 +5,7 @@ class Vehiculo {
     id = "";
     modelo = "";
     anoFab = 1885;
-    velMax=0;
+    velMax=1;
 
     constructor(_id, _modelo, _anoFab, _velMax) {
         this.id=_id== null ? "" : _id;
@@ -16,8 +16,8 @@ class Vehiculo {
 }
 
 class Aereo extends Vehiculo{
-    altMax=0;
-    autonomia=0;
+    altMax=1;
+    autonomia=1;
 
     constructor(_id, _modelo, _anoFab, _velMax, _altMax, _autonomia)
     {
@@ -29,12 +29,12 @@ class Aereo extends Vehiculo{
 
 class Terrestre extends Vehiculo{
     cantPue=0;
-    cantRue=0;
+    cantRue=1;
 
     constructor(_id, _modelo, _anoFab, _velMax, _cantPue, _cantRue)
     {
         super(_id, _modelo, _anoFab, _velMax);
-        this.cantPue= _cantPue>0 ? _cantPue : 1;
+        this.cantPue= _cantPue>-1 ? _cantPue : 0;
         this.cantRue= _cantRue>0 ? _cantRue : 1;
     }
 }
@@ -68,12 +68,10 @@ const spinner=document.getElementById("spinner");
 traerDatosTabla();
 
 //GET
-//***XHTTP
-
-mostrarSpinner();
-
-
+//***FETCH
 function traerDatosTabla(){
+    mostrarSpinner();
+    
     let consulta = fetch('http://localhost/vehiculoAereoTerrestre.php', {
         method: 'GET',
         mode: 'cors',
@@ -114,7 +112,6 @@ function traerDatosTabla(){
         generarTabla();
     });
 }
-
 
 function generarTabla(){
     document.getElementById('form_datos_tabla').remove();
@@ -225,7 +222,7 @@ function rellenarAbm(vehiculo){
 //HABILITAR O NO LOS INPUT DEL ABM
 function ajustarAbmSegunTipo(){
     
-    //vehiculo
+    //VEHICULO
     abmInputmodelo.disabled=false;
     abmInputanoFab.disabled=false;
     abmInputvelMax.disabled=false;
@@ -339,41 +336,7 @@ abmAceptar.addEventListener("click", ()=>{
 abmCancelar.addEventListener("click", abrirTabla);
 
 //PUT - AGREGAR REGISTRO
-//***SIN ASYNC
-
-/*
-function agregarNuevoRegistro()
-{
-    mostrarSpinner();
-
-    let nuevoRegistro=crearvehiculoAbm();
-
-    let consulta = fetch('http://localhost/vehiculoAereoTerrestre.php', {
-        method: 'PUT',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer', 
-        body: JSON.stringify(nuevoRegistro)
-    });
-
-    consulta.then(respuesta =>{
-        if (respuesta.status==200)
-            return respuesta.json();
-        alert("ERROR! El registro no fue dado de alta...");
-    }).then(texto=>{
-        nuevoRegistro.id=texto.id;
-        vehiculos.push(nuevoRegistro);
-        mostrarSpinner(false);
-        abrirTabla();
-    });
-}
-*/
-
+//***XHTTP
 function agregarNuevoRegistro(){
     mostrarSpinner();
 
