@@ -2,13 +2,13 @@
 class Vehiculo {
     id = "";
     modelo = "";
-    anoFab = 1885;
+    anoFab = 1886;
     velMax=1;
 
     constructor(_id, _modelo, _anoFab, _velMax) {
         this.id=_id== null ? "" : _id;
         this.modelo= _modelo==null ? "" : _modelo;
-        this.anoFab= _anoFab>1884 ? _anoFab : 1885;
+        this.anoFab= _anoFab>1885 ? _anoFab : 1886;
         this.velMax= _velMax>-1 ? _velMax : _velMax;
     }
 }
