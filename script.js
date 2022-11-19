@@ -442,12 +442,12 @@ function eliminarRegistro(_vehiculo)
 function datosValidados(){
     if(
         (abmInputmodelo.value.trim()!=="") &&
-        (!isNaN(abmInputanoFab.value) && parseInt(abmInputanoFab.value)>-1) &&
-        (!isNaN(abmInputvelMax.value) && parseInt(abmInputvelMax.value)>-1) &&
-        (abmInputaltMax.disabled ? true : (!isNaN(abmInputaltMax.value) && parseInt(abmInputaltMax.value)>-1)) &&
-        (abmInputautonomia.disabled ? true : (!isNaN(abmInputautonomia.value) && parseInt(abmInputautonomia.value)>-1)) &&
+        (!isNaN(abmInputanoFab.value) && parseInt(abmInputanoFab.value)>1885) &&
+        (!isNaN(abmInputvelMax.value) && parseInt(abmInputvelMax.value)>0) &&
+        (abmInputaltMax.disabled ? true : (!isNaN(abmInputaltMax.value) && parseInt(abmInputaltMax.value)>0)) &&
+        (abmInputautonomia.disabled ? true : (!isNaN(abmInputautonomia.value) && parseInt(abmInputautonomia.value)>0)) &&
         (abmInputcantPue.disabled ? true : (!isNaN(abmInputcantPue.value) && parseInt(abmInputcantPue.value)>-1)) &&
-        (abmInputcantRue.disabled ? true : (!isNaN(abmInputcantRue.value) && parseInt(abmInputcantRue.value)>-1))
+        (abmInputcantRue.disabled ? true : (!isNaN(abmInputcantRue.value) && parseInt(abmInputcantRue.value)>0))
     )
         return true;
     alert("Faltan datos por validar...");
